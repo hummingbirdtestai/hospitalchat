@@ -1,0 +1,40 @@
+openapi: 3.0.0
+info:
+  title: Doctor Chat API
+  description: API for AI doctor-patient conversation with persistent Supabase storage
+  version: 1.0.0
+servers:
+  - url: https://doctor-chat-api.up.railway.app
+paths:
+  /chat:
+    post:
+      summary: Send patient message & get doctor reply
+      tags: [Chat]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                patient_id:
+                  type: string
+                  example: "uuid-of-patient"
+                message:
+                  type: string
+                  example: "I have a headache since morning."
+      responses:
+        "200":
+          description: Doctor's reply with updated conversation history
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  reply:
+                    type: string
+                    example: "Can you tell me if the headache is one-sided or on both sides?"
+        "400":
+          description: Invalid input
+        "500":
+          description: Server error
