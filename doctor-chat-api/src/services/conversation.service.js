@@ -5,7 +5,6 @@ import { supabase } from "../config/supabaseClient.js";
  * If not found, create a new one.
  */
 export async function getOrCreateConversation(patientId) {
-  // 1. Make sure patient exists in profiles
   const { data: profile, error: profileError } = await supabase
     .from("profiles")
     .select("id")
@@ -16,7 +15,6 @@ export async function getOrCreateConversation(patientId) {
     throw new Error(`Patient ${patientId} not found in profiles`);
   }
 
-  // 2. Get latest conversation for this patient
   const { data: existingConv, error: convError } = await supabase
     .from("conversations")
     .select("*")
@@ -28,7 +26,6 @@ export async function getOrCreateConversation(patientId) {
   if (convError) throw new Error(`Error fetching conversation: ${convError.message}`);
   if (existingConv) return existingConv;
 
-  // 3. If no conversation, create one
   const { data: newConv, error: newConvError } = await supabase
     .from("conversations")
     .insert([{ patient_id: patientId }])
@@ -56,7 +53,6 @@ export async function getConversationHistory(conversationId) {
 
 /**
  * Add a new message to conversation.
- * Also updates the conversation's last_updated timestamp.
  */
 export async function addMessage(conversationId, sender, content) {
   const { error: insertError } = await supabase
