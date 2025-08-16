@@ -2,7 +2,7 @@
   "name": "doctor-chat-api",
   "version": "1.0.0",
   "description": "AI-powered doctor-patient conversation API with Supabase storage",
-  "main": "src/app.js",
+  "main": "src/index.js",
   "type": "module",
   "scripts": {
     "start": "node src/index.js",
