@@ -8,16 +8,18 @@ import errorHandler from "./middlewares/errorHandler.js";
 
 const app = express();
 
-// ✅ CORS (open for now, restrict later)
-app.use(
-  cors({
-    origin: "*", // allow all for testing
-    credentials: true,
-  })
-);
+// ✅ Strong CORS config for Swagger + browser requests
+const corsOptions = {
+  origin: "*", // allow all (for testing; later restrict to your frontend domain)
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Origin", "X-Requested-With", "Content-Type", "Accept", "Authorization"],
+};
 
-// ✅ Handle preflight requests globally (important for Swagger UI)
-app.options("*", cors());
+// Apply CORS globally
+app.use(cors(corsOptions));
+
+// ✅ Handle preflight OPTIONS explicitly
+app.options("*", cors(corsOptions));
 
 app.use(express.json());
 
