@@ -3,8 +3,13 @@ info:
   title: Doctor Chat API
   description: API for AI doctor-patient conversation with persistent Supabase storage
   version: 1.0.0
+
 servers:
+  - url: http://localhost:3000
+    description: Local development
   - url: https://doctor-chat-api.up.railway.app
+    description: Production (Railway)
+
 paths:
   /chat:
     post:
@@ -19,7 +24,7 @@ paths:
               properties:
                 patient_id:
                   type: string
-                  example: "uuid-of-patient"
+                  example: "bc2fd49f-e5f9-4c79-9ccb-4b7d6934e3e3"
                 message:
                   type: string
                   example: "I have a headache since morning."
