@@ -1,17 +1,14 @@
 openapi: 3.0.0
 info:
   title: Doctor Chat API
-  description: API for AI doctor-patient conversation with persistent Supabase storage
   version: 1.0.0
-
 servers:
   - url: https://hospitalchat-production.up.railway.app
-    description: Production (Railway)
 
 paths:
   /chat:
     post:
-      summary: Send patient message & get doctor reply
+      summary: Send a patient message & get doctor reply
       tags: [Chat]
       requestBody:
         required: true
@@ -22,13 +19,12 @@ paths:
               properties:
                 patient_id:
                   type: string
-                  example: "bc2fd49f-e5f9-4c79-9ccb-4b7d6934e3e3"
+                  format: uuid
                 message:
                   type: string
-                  example: "I have a headache since morning."
       responses:
         "200":
-          description: Doctor's reply with updated conversation history
+          description: Doctor's reply
           content:
             application/json:
               schema:
@@ -36,8 +32,32 @@ paths:
                 properties:
                   reply:
                     type: string
-                    example: "Can you tell me if the headache is one-sided or on both sides?"
-        "400":
-          description: Invalid input
-        "500":
-          description: Server error
+
+  /conversations/{conversation_id}:
+    get:
+      summary: Get conversation history
+      tags: [Chat]
+      parameters:
+        - name: conversation_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Array of messages
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    sender:
+                      type: string
+                    content:
+                      type: string
+                    created_at:
+                      type: string
+                      format: date-time
