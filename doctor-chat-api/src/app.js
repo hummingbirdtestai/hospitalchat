@@ -9,29 +9,36 @@ import healthRoutes from "./routes/health.routes.js";
 const app = express();
 
 // ✅ CORS fix: allow Swagger UI & any browser to call the API
-app.use(cors({
-  origin: "*", // allow all origins for now (restrict later)
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"]
-}));
+app.use(
+  cors({
+    origin: "*", // allow all origins for now (restrict later)
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
 
 app.use(express.json());
 
-// Swagger docs
+// ✅ Root route (for Railway health check / quick test)
+app.get("/", (req, res) => {
+  res.send("✅ Doctor Chat API is running!");
+});
+
+// ✅ Swagger docs
 const swaggerDoc = YAML.load("./src/docs/swagger.yaml");
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDoc));
 
-// Routes
+// ✅ Routes
 app.use("/chat", chatRoutes);
 app.use("/health", healthRoutes);
 
-// Error handler
+// ✅ Error handler
 app.use((err, req, res, next) => {
   console.error(err);
   res.status(500).json({ error: err.message || "Server error" });
 });
 
-// Start server
+// ✅ Start server
 app.listen(config.port, () => {
   console.log(`🚀 API running on port ${config.port}`);
 });
