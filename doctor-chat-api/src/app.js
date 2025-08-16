@@ -1,3 +1,4 @@
+// src/app.js
 import express from "express";
 import cors from "cors";
 import swaggerUi from "swagger-ui-express";
@@ -11,11 +12,14 @@ const app = express();
 // ✅ CORS fix: allow Swagger UI & any browser to call the API
 app.use(
   cors({
-    origin: "*", // allow all origins for now (restrict later)
+    origin: ["https://doctor-chat-api.up.railway.app", "*"], // allow API + Swagger UI
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
+
+// ✅ Handle preflight OPTIONS
+app.options("*", cors());
 
 app.use(express.json());
 
@@ -24,7 +28,7 @@ app.get("/", (req, res) => {
   res.send("✅ Doctor Chat API is running!");
 });
 
-// ✅ Swagger docs
+// ✅ Swagger docs (served from the same domain as API)
 const swaggerDoc = YAML.load("./src/docs/swagger.yaml");
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDoc));
 
