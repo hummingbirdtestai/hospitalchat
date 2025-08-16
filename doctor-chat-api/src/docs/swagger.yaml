@@ -5,10 +5,10 @@ info:
   version: 1.0.0
 
 servers:
+  - url: https://doctor-chat-api.up.railway.app
+    description: Production (Railway) ✅ default
   - url: http://localhost:3000
     description: Local development
-  - url: https://doctor-chat-api.up.railway.app
-    description: Production (Railway)
 
 paths:
   /chat:
