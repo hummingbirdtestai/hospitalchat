@@ -1,36 +1,23 @@
-import axios from "axios";
-import { config } from "../config/env.js";
+import OpenAI from "openai";
 
-const SYSTEM_PROMPT = `
-You are Dr. Chiranjeevi, an experienced physician.
-Ask relevant history, follow up, give differential diagnoses, and suggest investigations.
-Be empathetic. Mix English and Telugu if the patient does so.
-`;
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY
+});
 
-export async function getDoctorReply(history, patientMessage) {
-  const messages = [
-    { role: "system", content: SYSTEM_PROMPT },
-    ...history.map(m => ({
-      role: m.sender === "doctor" ? "assistant" : "user",
-      content: m.content
-    })),
-    { role: "user", content: patientMessage }
-  ];
+export async function getDoctorReply(message) {
+  try {
+    const completion = await openai.chat.completions.create({
+      model: "gpt-4o-mini",
+      messages: [
+        { role: "system", content: "You are a helpful medical assistant." },
+        { role: "user", content: message }
+      ],
+      max_tokens: 200
+    });
 
-  const resp = await axios.post(
-    "https://api.openai.com/v1/chat/completions",
-    {
-      model: "gpt-4o-mini", // Replace with gpt-5-mini once available
-      messages,
-      temperature: 0.7
-    },
-    {
-      headers: {
-        Authorization: `Bearer ${config.openaiApiKey}`,
-        "Content-Type": "application/json"
-      }
-    }
-  );
-
-  return resp.data.choices[0].message.content;
+    return completion.choices[0].message.content.trim();
+  } catch (err) {
+    console.error("OpenAI error:", err);
+    return "⚠️ Sorry, I couldn’t process your request right now.";
+  }
 }
