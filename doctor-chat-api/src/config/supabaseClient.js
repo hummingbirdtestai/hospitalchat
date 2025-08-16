@@ -1,4 +1,10 @@
 import { createClient } from "@supabase/supabase-js";
-import { config } from "./env.js";
 
-export const supabase = createClient(config.supabaseUrl, config.supabaseKey);
+const supabaseUrl = process.env.SUPABASE_URL;
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY; // Service role key for backend
+
+export const supabase = createClient(supabaseUrl, supabaseServiceKey, {
+  auth: {
+    persistSession: false
+  }
+});
