@@ -7,7 +7,7 @@ const openai = new OpenAI({
 export async function getDoctorReply(message) {
   try {
     const completion = await openai.chat.completions.create({
-      model: "gpt-4o-mini",
+      model: "gpt-5-mini",
       messages: [
         { role: "system", content: "You are a helpful medical assistant." },
         { role: "user", content: message }
@@ -21,3 +21,4 @@ export async function getDoctorReply(message) {
     return "⚠️ Sorry, I couldn’t process your request right now.";
   }
 }
+
