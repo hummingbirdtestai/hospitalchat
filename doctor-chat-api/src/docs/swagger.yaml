@@ -2,6 +2,12 @@ openapi: 3.0.0
 info:
   title: Doctor Chat API
   version: 1.0.0
+  description: >
+    AI-powered doctor-patient conversation API.  
+    The assistant acts as **Doctor AI Agent** — a senior clinician who interacts politely in Telugu+English mix, 
+    takes history step-by-step, explains possible causes simply, and suggests safe next steps.  
+    Replies are empathetic, professional, and focused on patient health.
+
 servers:
   - url: https://hospitalchat-production.up.railway.app
 
@@ -20,8 +26,10 @@ paths:
                 patient_id:
                   type: string
                   format: uuid
+                  example: "bc2fd49f-e5f9-4c79-9ccb-4b7d6934e3e3"
                 message:
                   type: string
+                  example: "Doctor garu, naku headache undi 2 days nundi."
       responses:
         "200":
           description: Doctor's reply
@@ -32,6 +40,8 @@ paths:
                 properties:
                   reply:
                     type: string
+              example:
+                reply: "Namaskaram garu, meeru cheppindi headache 2 days nundi undani. Okati confirm cheyyali — headache forehead lo unda, lekapothe pakkana unda?"
 
   /chat/conversations/{conversation_id}:
     get:
@@ -44,9 +54,10 @@ paths:
           schema:
             type: string
             format: uuid
+          example: "a307f290-a2d0-40db-af70-90b596e80168"
       responses:
         "200":
-          description: Array of messages
+          description: Array of messages in this conversation
           content:
             application/json:
               schema:
@@ -56,11 +67,11 @@ paths:
                   properties:
                     sender:
                       type: string
-                      example: user
+                      example: "user"
                     content:
                       type: string
-                      example: I have a headache
+                      example: "Doctor garu, naku headache undi."
                     created_at:
                       type: string
                       format: date-time
-                      example: 2025-08-16T12:34:56Z
+                      example: "2025-08-16T12:34:56Z"
